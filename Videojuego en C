@@ -1,0 +1,121 @@
+#include <stdio.h>
+#include <string.h>
+
+typedef struct {
+    char nombre[50];
+    int ataque;
+    int defensa;
+    int vida;
+} Objeto;
+
+typedef struct {
+    char nombre[50];
+    int ataque_base;
+    int defensa_base;
+    int velocidad_ataque;
+    int vida_base;
+    Objeto objetos[3];
+} Personaje;
+
+typedef struct {
+    char nombre[50];
+    Personaje personajes[3];
+} Equipo;
+
+void leerobjeto(Objeto *objeto) {
+    //printf("Ingrese el nombre del objeto: ");
+    fgets(objeto->nombre, 50, stdin);
+    objeto->nombre[strcspn(objeto->nombre, "\n")] = 0;
+
+    //printf("Ingrese estadísticas del objeto: ");
+    scanf("%d %d %d", &objeto->ataque, &objeto->defensa, &objeto->vida);
+}
+
+void leerpersonaje(Personaje *personaje) {
+    //printf("Ingrese el nombre del personaje: ");
+    fgets(personaje->nombre, 50, stdin);
+    personaje->nombre[strcspn(personaje->nombre, "\n")] = 0;
+
+    //printf("Ingrese estadísticas base: ");
+    scanf("%d %d %d %d", &personaje->ataque_base, &personaje->defensa_base, &personaje->velocidad_ataque, &personaje->vida_base);
+
+    int num_objetos;
+    printf("Ingrese el número de objetos (máximo %d): ", 3);
+    scanf("%d", &num_objetos);
+
+    for (int i = 0; i < num_objetos; i++) {
+        leerobjeto(&personaje->objetos[i]);
+    }
+}
+
+void leerequipo(Equipo *equipo) {
+    int num_personajes;
+    //printf("Ingrese el número de personajes por equipo: ");
+    scanf("%d", &num_personajes);
+
+    //printf("Ingese el nombre del equipo: ");
+    fgets(equipo->nombre, 50, stdin);
+    equipo->nombre[strcspn(equipo->nombre, "\n")] = 0;
+
+    for (int i = 0; i < num_personajes; i++) {
+        leerpersonaje(&equipo->personajes[i]);
+    }
+}
+
+void mostrarobjeto(Objeto *objeto) {
+    printf("Objeto %s (%d, %d, %d)\n", objeto->nombre, objeto->ataque, objeto->defensa, objeto->vida);
+}
+
+void mostrarpersonaje(Personaje *personaje) {
+    printf("Personaje %s [%d, %d, %d, %d, %d]\n", personaje->nombre, personaje->ataque_base, personaje->defensa_base, personaje->velocidad_ataque, personaje->vida_base, 3);
+
+    for (int i = 0; i < 3; i++) {
+        mostrarobjeto(&personaje->objetos[i]);
+    }
+}
+
+void mostrarEquipo(Equipo *equipo) {
+    printf("Equipo %s\n", equipo->nombre);
+
+    for (int i = 0; i < 3; i++) {
+        mostrarpersonaje(&equipo->personajes[i]);
+    }
+}
+Objeto *objetodano(Equipo *equipo) {
+    Objeto *mayordano = &equipo->personajes[0].objetos[0];
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (equipo->personajes[i].objetos[j].ataque > mayordano->ataque) {
+                mayordano = &equipo->personajes[i].objetos[j];
+            }
+        }
+    }
+    return mayordano;
+}
+
+Personaje *personajevida(Equipo *equipo) {
+    Personaje *masvida = &equipo->personajes[0];
+
+    for (int i = 1; i < 3; i++) {
+        if (equipo->personajes[i].vida_base > masvida->vida_base) {
+            masvida = &equipo->personajes[i];
+        }
+    }
+    return masvida;
+}
+
+int main() {
+    Equipo equipo1, equipo2;
+
+    leerequipo(&equipo1);
+    leerequipo(&equipo2);
+
+    //printf("Nombre del objeto con más ataque del primer equipo:\n");
+    mostrarobjeto(objetodano(&equipo1));
+
+    //printf("Nombre del personaje con más vida del segundo equipo:\n");
+    mostrarpersonaje(personajevida(&equipo2));
+
+    return 0;
+}
