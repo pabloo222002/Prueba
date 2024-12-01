@@ -1,0 +1,32 @@
+name: Auto Commit Script
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Ejecuta el script todos los días a la medianoche UTC
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install random datetime
+
+      - name: Run script
+        run: python actualizar.py
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "pabloo222002"
+          git config --global user.email "pabloo222002@gmail.com"
+          git add .
+          git commit -m "Commit automático desde GitHub Actions"
+          git push
