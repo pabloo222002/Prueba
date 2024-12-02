@@ -17,9 +17,6 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Install dependencies
-        run: pip install random datetime
-
       - name: Run script
         run: python actualizar.py
 
