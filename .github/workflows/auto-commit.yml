@@ -20,6 +20,12 @@ jobs:
       - name: Run script
         run: python actualizar.py
 
+      - name: Debugging logs
+        run: |
+          echo "=== Directory structure ==="
+          ls -la
+          echo "=== Contents of actualizar.py ==="
+          cat actualizar.py
 
       - name: Commit changes
         run: |
@@ -28,3 +34,4 @@ jobs:
           git add .
           git commit -m "Commit automático desde GitHub Actions"
           git push
+
