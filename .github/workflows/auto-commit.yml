@@ -1,25 +1,33 @@
-name: Auto Commit Script
+name: Auto Commit
+
 on:
   schedule:
-    - cron: "0 0 * * *" # Ejecuta el script todos los días a la medianoche UTC
+    # Ejecutar todos los días a las 00:00 UTC
+    - cron: '0 0 * * *'
+
 jobs:
-  run-script:
+  auto-commit:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.x"
-      - name: Install dependencies
-        run: pip install random datetime
-      - name: Run script
-        run: python actualizar.py
-      - name: Commit changes
-        run: |
-          git config --global user.name "pabloo222002"
-          git config --global user.email "pabloo222002@gmail.com"
-          git add .
-          git commit -m "Commit automático desde GitHub Actions"
-          git push
+    # Paso 1: Clonar el repositorio
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Paso 2: Configurar el nombre y correo para el commit
+    - name: Setup Git Config
+      run: |
+        git config --global user.name "pabloo222002"
+        git config --global user.email "pabloo222002@gmail.com"
+
+    # Paso 3: Generar contenido aleatorio
+    - name: Update file with random content
+      run: |
+        echo $RANDOM >> "Videojuego en C"  # Agrega un número aleatorio al archivo
+
+    # Paso 4: Hacer commit y push
+    - name: Commit and Push Changes
+      run: |
+        git add Videojuego_en_C.c
+        git commit -m "Auto-update with random content [skip ci]"
+        git push
