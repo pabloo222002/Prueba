@@ -1,12 +1,12 @@
-name: Auto Commit
+name: Auto-Commit
 
 on:
   schedule:
-    # Ejecutar todos los días a las 00:00 UTC
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"  # Ejecuta el workflow todos los días a medianoche
+  workflow_dispatch:  # Permite ejecutarlo manualmente
 
 jobs:
-  auto-commit:
+  run-script:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,20 +14,23 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Paso 2: Configurar el nombre y correo para el commit
-    - name: Setup Git Config
-      run: |
-        git config --global user.name "pabloo222002"
-        git config --global user.email "pabloo222002@gmail.com"
+    # Paso 2: Configurar Python
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.x"
 
-    # Paso 3: Generar contenido aleatorio
-    - name: Update file with random content
+    # Paso 3: Ejecutar el script Python
+    - name: Run Python script
       run: |
-        echo $RANDOM >> "Videojuego en C"  # Agrega un número aleatorio al archivo
+        python3 actualizar.py  # Ejecuta el script para actualizar el archivo
 
-    # Paso 4: Hacer commit y push
-    - name: Commit and Push Changes
+    # Paso 4: Hacer commit de los cambios
+    - name: Commit and push changes
       run: |
-        git add Videojuego_en_C.c
-        git commit -m "Auto-update with random content [skip ci]"
+        git config --global user.name "pabloo222002"  # Sustituye con tu usuario de GitHub
+        git config --global user.email "pabloo222002@gmail.com"  # Sustituye con tu correo de GitHub
+        git add .
+        git commit -m "Auto-update $(date)"
         git push
+
