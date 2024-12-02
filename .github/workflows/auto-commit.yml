@@ -1,37 +1,23 @@
-name: Auto Commit Script
+name: Run Script
 
 on:
-  schedule:
-    - cron: "0 0 * * *" # Ejecuta el script todos los días a la medianoche UTC
+  push:
+    branches:
+      - main
 
 jobs:
   run-script:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.x"
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.x
 
-      - name: Run script
-        run: python actualizar.py
-
-      - name: Debugging logs
-        run: |
-          echo "=== Directory structure ==="
-          ls -la
-          echo "=== Contents of actualizar.py ==="
-          cat actualizar.py
-
-      - name: Commit changes
-        run: |
-          git config --global user.name "pabloo222002"
-          git config --global user.email "pabloo222002@gmail.com"
-          git add .
-          git commit -m "Commit automático desde GitHub Actions"
-          git push
+    - name: Run Python script
+      run: python script.py
 
