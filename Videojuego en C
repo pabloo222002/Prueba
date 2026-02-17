@@ -1001,3 +1001,5 @@ int main() {
 // 2026-02-15 01:54:11 - Pequeña mejora en el código.
 
 // 2026-02-16 01:50:15 - Agregando nuevos comentarios.
+
+// 2026-02-17 01:48:18 - Limpieza de código y refactorización.
