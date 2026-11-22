@@ -1557,3 +1557,5 @@ int main() {
 // 2026-11-20 05:28:47 - Pequeña mejora en el código.
 
 // 2026-11-21 05:21:49 - Agregando nuevos comentarios.
+
+// 2026-11-22 04:47:18 - Limpieza de código y refactorización.
